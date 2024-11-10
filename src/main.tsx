@@ -8,6 +8,7 @@ import Booking from './pages/Booking';
 import BookingOverview from './pages/BookingOverview';
 import BookingConfirmation from './pages/BookingConfirmation';
 import NotFound from './pages/NotFound';
+import RootLayout from './layout/RootLayout';
 
 const router = createBrowserRouter([
   {
@@ -16,15 +17,21 @@ const router = createBrowserRouter([
   },
   {
     path: '/booking',
-    element: <Booking />,
-  },
-  {
-    path: '/overview',
-    element: <BookingOverview />,
-  },
-  {
-    path: '/confirmation',
-    element: <BookingConfirmation />,
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <Booking />,
+      },
+      {
+        path: 'overview',
+        element: <BookingOverview />,
+      },
+      {
+        path: 'confirmation',
+        element: <BookingConfirmation />,
+      },
+    ],
   },
   {
     path: '*',
@@ -34,34 +41,32 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <div className='bg-[#FFF4F1] relative'>
-      <RouterProvider router={router} />
-      <Toaster
-        position='top-center'
-        reverseOrder={false}
-        gutter={8}
-        toastOptions={{
+    <RouterProvider router={router} />
+    <Toaster
+      position='top-center'
+      reverseOrder={false}
+      gutter={8}
+      toastOptions={{
+        duration: 3000,
+        style: {
+          background: '#363636',
+          color: '#fff',
+        },
+        success: {
           duration: 3000,
           style: {
-            background: '#363636',
+            background: '#60d394',
             color: '#fff',
           },
-          success: {
-            duration: 3000,
-            style: {
-              background: '#60d394',
-              color: '#fff',
-            },
+        },
+        error: {
+          duration: 3000,
+          style: {
+            background: '#ee6055',
+            color: '#fff',
           },
-          error: {
-            duration: 3000,
-            style: {
-              background: '#ee6055',
-              color: '#fff',
-            },
-          },
-        }}
-      />
-    </div>
+        },
+      }}
+    />
   </StrictMode>
 );
