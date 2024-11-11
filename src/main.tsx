@@ -2,13 +2,14 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import toast, { ToastBar, Toaster } from 'react-hot-toast';
 import InitialLoader from './pages/InitialLoader';
 import Booking from './pages/Booking';
 import BookingOverview from './pages/BookingOverview';
 import BookingConfirmation from './pages/BookingConfirmation';
 import NotFound from './pages/NotFound';
 import RootLayout from './layout/RootLayout';
+import { AiOutlineClose } from 'react-icons/ai';
 
 const router = createBrowserRouter([
   {
@@ -60,13 +61,29 @@ createRoot(document.getElementById('root')!).render(
           },
         },
         error: {
-          duration: 3000,
+          duration: 5000,
           style: {
             background: '#ee6055',
             color: '#fff',
           },
         },
       }}
-    />
+    >
+      {(t) => (
+        <ToastBar toast={t}>
+          {({ icon, message }) => (
+            <>
+              {icon}
+              {message}
+              {t.type !== 'loading' && (
+                <button onClick={() => toast.dismiss(t.id)}>
+                  <AiOutlineClose size={24} className='drop-shadow-md' />
+                </button>
+              )}
+            </>
+          )}
+        </ToastBar>
+      )}
+    </Toaster>
   </StrictMode>
 );
