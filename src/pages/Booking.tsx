@@ -23,9 +23,18 @@ import { cn } from '../lib/utils';
 import { addHours, format, isBefore } from 'date-fns';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
+import { catchError } from '../services/catchError';
+import { postBooking } from '../services/api/post';
+import { BookingRequest } from '../types/Booking';
+import { useConfirmationStore } from '../store/confirmation';
+import { useNavigate } from 'react-router-dom';
 
 export default function Booking() {
-  const [shoesArray, setShoesArray] = useState([38]);
+  const { addBooking } = useConfirmationStore();
+  const [shoesArray, setShoesArray] = useState([0]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof bookingSchema>>({
     resolver: zodResolver(bookingSchema),
@@ -42,17 +51,31 @@ export default function Booking() {
   function adjustTheNumberOfLanes(showToast?: boolean) {
     const people = Number(form.getValues('people'));
     const lanes = Number(form.getValues('lanes'));
+    // Calculate the number of lanes needed based on the number of people
+    const nr_of_lanes = Math.ceil(people / 4).toString();
 
-    setShoesArray(Array.from({ length: people }, () => 38));
+    // This will create an array of 0s with the length of the number of people
+    setShoesArray(Array.from({ length: people }, () => 0));
 
+    // If the number of people is greater than the number of lanes, update the number of lanes
     if (people / 4 > lanes) {
-      const nr_of_lanes = Math.ceil(people / 4).toString();
       form.setValue('lanes', nr_of_lanes);
       if (showToast) {
         toast.error(
           `You need at least ${nr_of_lanes} lanes for the selected number of players.🎳`
         );
       }
+      return;
+    }
+
+    if (lanes > people) {
+      form.setValue('lanes', people.toString());
+      if (showToast) {
+        toast.error(
+          `You can only book a maximum of ${people} lanes for the selected number of players.🎳`
+        );
+      }
+      return;
     }
   }
 
@@ -75,11 +98,31 @@ export default function Booking() {
     }
   }
 
-  function onSubmit(values: z.infer<typeof bookingSchema>) {
+  async function onSubmit(values: z.infer<typeof bookingSchema>) {
+    // Getting the values from the form
     const { when, time, lanes, people } = values;
+    // Creating the date string (yyyy-MM-ddTHH:mm) for the API
     const DATE = format(new Date(when), 'yyyy-MM-dd') + 'T' + time;
-    const postObject = { when: DATE, lanes, people, shoes: shoesArray };
-    console.log(postObject);
+    // Creating the object to post to the API
+    const postObject: BookingRequest = {
+      when: DATE,
+      lanes: Number(lanes),
+      people: Number(people),
+      shoes: shoesArray,
+    };
+
+    try {
+      setIsLoading(true);
+
+      const res = await postBooking(postObject);
+      addBooking(res);
+      toast.success('Booking successfully created!🎉');
+      return setTimeout(() => navigate('/booking/confirmation'), 1000);
+    } catch (error) {
+      toast.error(catchError(error));
+    } finally {
+      setIsLoading(false);
+    }
   }
   return (
     <section className='w-full h-full flex flex-col items-center'>
@@ -248,7 +291,7 @@ export default function Booking() {
                         {...field}
                         type='number'
                         className='border-[1px] border-t-transparent'
-                        min={10}
+                        min={21}
                         value={shoesArray[index]}
                         onChange={(e) =>
                           handleShoesChange(index, e.target.value)
@@ -266,10 +309,11 @@ export default function Booking() {
           </div>
 
           <button
+            disabled={isLoading}
             className='bg-[#EC315A] text-white font-bold text-2xl uppercase p-2 w-full rounded-sm mt-auto'
             type='submit'
           >
-            strIIIIIike!
+            {isLoading ? 'Loading...' : 'strIIIIIike!'}
           </button>
         </form>
       </Form>

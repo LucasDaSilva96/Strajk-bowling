@@ -11,38 +11,56 @@ import NotFound from './pages/NotFound';
 import RootLayout from './layout/RootLayout';
 import { AiOutlineClose } from 'react-icons/ai';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <InitialLoader />,
+    },
+    {
+      path: '/booking',
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: <Booking />,
+        },
+        {
+          path: 'overview',
+          element: <BookingOverview />,
+        },
+        {
+          path: 'confirmation',
+          element: <BookingConfirmation />,
+        },
+      ],
+    },
+    {
+      path: '*',
+      element: <NotFound />,
+    },
+  ],
+  // This is the new `future` option that we're passing to the router
   {
-    path: '/',
-    element: <InitialLoader />,
-  },
-  {
-    path: '/booking',
-    element: <RootLayout />,
-    children: [
-      {
-        index: true,
-        element: <Booking />,
-      },
-      {
-        path: 'overview',
-        element: <BookingOverview />,
-      },
-      {
-        path: 'confirmation',
-        element: <BookingConfirmation />,
-      },
-    ],
-  },
-  {
-    path: '*',
-    element: <NotFound />,
-  },
-]);
+    future: {
+      v7_relativeSplatPath: true,
+      v7_partialHydration: true,
+      v7_skipActionErrorRevalidation: true,
+      v7_normalizeFormMethod: true,
+      v7_fetcherPersist: true,
+    },
+  }
+);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <RouterProvider
+      router={router}
+      // This is the new `future` option that we're passing to the router provider
+      future={{
+        v7_startTransition: true,
+      }}
+    />
     <Toaster
       position='top-center'
       reverseOrder={false}
