@@ -10,6 +10,7 @@ import BookingConfirmation from './pages/BookingConfirmation';
 import NotFound from './pages/NotFound';
 import RootLayout from './layout/RootLayout';
 import { AiOutlineClose } from 'react-icons/ai';
+import ErrorElement from './components/ErrorElement';
 
 const router = createBrowserRouter(
   [
@@ -38,6 +39,9 @@ const router = createBrowserRouter(
     {
       path: '*',
       element: <NotFound />,
+    },
+    {
+      errorElement: <ErrorElement />,
     },
   ],
   // This is the new `future` option that we're passing to the router
@@ -74,7 +78,7 @@ createRoot(document.getElementById('root')!).render(
         success: {
           duration: 3000,
           style: {
-            background: '#60d394',
+            background: '#208b3a',
             color: '#fff',
           },
         },
