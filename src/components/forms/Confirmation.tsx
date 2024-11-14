@@ -5,26 +5,35 @@ import { Link } from 'react-router-dom';
 type ConfirmationProps = {
   showBtn: boolean;
   booking: BookingResponse;
+  height?: string;
 };
 
-export default function Confirmation({ showBtn, booking }: ConfirmationProps) {
+export default function Confirmation({
+  showBtn,
+  booking,
+  height,
+}: ConfirmationProps) {
   // Format the date to 'dd MMM' format (e.g. 01 Jan)
   const date = format(new Date(booking.when), 'dd MMM');
 
   return (
-    <div className='w-full max-w-md h-[65dvh]  flex flex-col items-center'>
+    <div
+      className={`w-full max-w-md ${
+        height ? 'h-[' + height + ']' : 'h-[62dvh]'
+      }  flex flex-col items-center`}
+    >
       <article className='flex flex-col gap-1 items-center justify-center w-[375px] h-full'>
         <div className='relative uppercase p-2 w-[300px]'>
           <label
-            htmlFor='when'
+            htmlFor={`when-${booking.id}`}
             className='text-sm font-semibold text-[#441D81] absolute -top-0.5 left-5 z-10 backdrop-blur-sm bg-[#FFF4F1] px-1'
           >
             When
           </label>
           <input
             type='text'
-            name='when'
-            id='when'
+            name={`when-${booking.id}`}
+            id={`when-${booking.id}`}
             disabled
             value={`${booking.when.split('T')[1].slice(0, 5)}, ${date}`}
             className='w-full border-2 rounded-sm py-3 px-4 border-[#441D81] text-xl'
@@ -33,15 +42,15 @@ export default function Confirmation({ showBtn, booking }: ConfirmationProps) {
 
         <div className='relative uppercase p-2 w-[300px]'>
           <label
-            htmlFor='who'
+            htmlFor={`who-${booking.id}`}
             className='text-sm font-semibold text-[#441D81] absolute -top-0.5 left-5 z-10 backdrop-blur-sm bg-[#FFF4F1] px-1'
           >
             Who
           </label>
           <input
             type='text'
-            name='who'
-            id='who'
+            name={`who-${booking.id}`}
+            id={`who-${booking.id}`}
             disabled
             value={booking.people + ' pers'}
             className='w-full border-2 rounded-sm py-3 px-4 border-[#441D81] text-xl'
@@ -50,15 +59,15 @@ export default function Confirmation({ showBtn, booking }: ConfirmationProps) {
 
         <div className='relative uppercase p-2 w-[300px]'>
           <label
-            htmlFor='lanes'
+            htmlFor={`lanes-${booking.id}`}
             className='text-sm font-semibold text-[#441D81] absolute -top-0.5 left-5 z-10 backdrop-blur-sm bg-[#FFF4F1] px-1'
           >
             Lanes
           </label>
           <input
             type='text'
-            name='lanes'
-            id='lanes'
+            name={`lanes-${booking.id}`}
+            id={`lanes-${booking.id}`}
             disabled
             value={booking.lanes + (booking.lanes > 1 ? ' lanes' : ' lane')}
             className='w-full border-2 rounded-sm py-3 px-4 border-[#441D81] text-xl'
@@ -67,15 +76,15 @@ export default function Confirmation({ showBtn, booking }: ConfirmationProps) {
 
         <div className='relative uppercase p-2 w-[300px]'>
           <label
-            htmlFor='bookingNumber'
+            htmlFor={`bookingNumber-${booking.id}`}
             className='text-sm font-semibold text-[#441D81] absolute -top-0.5 left-5 z-10 backdrop-blur-sm bg-[#FFF4F1] px-1'
           >
             Booking number
           </label>
           <input
             type='text'
-            name='bookingNumber'
-            id='bookingNumber'
+            name={`bookingNumber-${booking.id}`}
+            id={`bookingNumber-${booking.id}`}
             disabled
             value={booking.id}
             className='w-full border-2 rounded-sm py-3 px-4 border-[#441D81] text-xl'

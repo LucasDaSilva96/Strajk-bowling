@@ -9,6 +9,8 @@ import { useConfirmationStore } from '../store/confirmation';
 import { useNavigate } from 'react-router-dom';
 import Book from '../components/forms/Book';
 import { format } from 'date-fns';
+import { motion } from 'motion/react';
+import { pageVariants } from '../animation/animations';
 
 export default function Booking() {
   // This is the addBooking function from the confirmation store
@@ -52,7 +54,13 @@ export default function Booking() {
     }
   }
   return (
-    <section className='w-full h-full flex flex-col items-center'>
+    <motion.section
+      initial={pageVariants.initial}
+      animate={pageVariants.in}
+      transition={pageVariants.transition}
+      exit={pageVariants.out}
+      className='w-full h-full flex flex-col items-center'
+    >
       <div className='flex flex-col items-center gap-1 -mt-8'>
         <img
           src='/svgs/logo.svg'
@@ -77,6 +85,6 @@ export default function Booking() {
         shoesArray={shoesArray}
         isLoading={isLoading}
       />
-    </section>
+    </motion.section>
   );
 }

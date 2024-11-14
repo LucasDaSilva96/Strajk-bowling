@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound';
 import RootLayout from './layout/RootLayout';
 import { AiOutlineClose } from 'react-icons/ai';
 import ErrorElement from './components/ErrorElement';
+import { updatePageTitle } from './services/updatePageTitle';
 
 const router = createBrowserRouter(
   [
@@ -25,20 +26,36 @@ const router = createBrowserRouter(
         {
           index: true,
           element: <Booking />,
+          loader: () => {
+            updatePageTitle('Booking');
+            return null;
+          },
         },
         {
           path: 'overview',
           element: <BookingOverview />,
+          loader: () => {
+            updatePageTitle('Overview of bookings');
+            return null;
+          },
         },
         {
           path: 'confirmation',
           element: <BookingConfirmation />,
+          loader: () => {
+            updatePageTitle('Confirmation');
+            return null;
+          },
         },
       ],
     },
     {
       path: '*',
       element: <NotFound />,
+      loader: () => {
+        updatePageTitle('Not found');
+        return null;
+      },
     },
     {
       errorElement: <ErrorElement />,

@@ -1,15 +1,26 @@
 import { useConfirmationStore } from '../store/confirmation';
 import { Link } from 'react-router-dom';
 import Confirmation from '../components/forms/Confirmation';
+import { motion } from 'motion/react';
+import { boxVariants, pageVariants } from '../animation/animations';
+import Heading from '../components/Heading';
 
 export default function BookingConfirmation() {
   // Get the recent booking from the store
   const { recentBooking } = useConfirmationStore();
 
+  const logo = 'See#you#soon!';
+
   // If no recent booking found, show a message
   if (!recentBooking) {
     return (
-      <section className='w-full h-[80dvh] flex items-center justify-center'>
+      <motion.section
+        initial={pageVariants.initial}
+        animate={pageVariants.in}
+        transition={pageVariants.transition}
+        exit={pageVariants.out}
+        className='w-full h-[80dvh] flex items-center justify-center'
+      >
         <div className='flex flex-col items-center gap-4'>
           <h1 className='text-2xl font-semibold text-[#EC315A]'>
             No booking confirmation found
@@ -21,30 +32,27 @@ export default function BookingConfirmation() {
             Book now
           </Link>
         </div>
-      </section>
+      </motion.section>
     );
   }
 
   return (
-    <section className='w-full h-full flex justify-center flex-col gap-2 items-center '>
-      <div className='flex flex-col items-center gap-1 -mt-8'>
-        <img
-          src='/svgs/logo.svg'
-          alt='logo'
-          className='max-w-20 h-auto drop-shadow-lg'
-        />
-        <h1 className='text-[#EC315A] text-4xl font-bold uppercase drop-shadow'>
-          See you soon!
-        </h1>
-      </div>
+    <motion.section
+      className='w-full h-full flex justify-center flex-col gap-1 items-center'
+      initial={pageVariants.initial}
+      animate={pageVariants.in}
+      transition={pageVariants.transition}
+      exit={pageVariants.out}
+    >
+      <Heading logo={logo} subHeading='booking details' />
 
-      <div className='w-[370px] flex items-center uppercase font-semibold text-[#441D81] text-lg justify-evenly'>
-        <div className='p-[1px]  min-w-[25%] bg-[#441D81]' />
-        <span>booking details</span>
-        <div className='p-[1px] min-w-[25%] bg-[#441D81]' />
-      </div>
-
-      <Confirmation booking={recentBooking} showBtn={true} />
-    </section>
+      <motion.div
+        initial={boxVariants.initial}
+        animate={boxVariants.animate}
+        transition={{ delay: 2, duration: 0.3, type: 'tween' }}
+      >
+        <Confirmation booking={recentBooking} showBtn={true} />
+      </motion.div>
+    </motion.section>
   );
 }

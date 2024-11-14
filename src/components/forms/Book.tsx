@@ -182,13 +182,18 @@ export default function Book({
             name='time'
             render={({ field }) => (
               <FormItem className='relative'>
-                <FormLabel className='absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs text-[#441D81]'>
+                <FormLabel
+                  htmlFor='time'
+                  className='absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs text-[#441D81]'
+                >
                   TIME
                 </FormLabel>
                 <FormControl onChange={adjustTime}>
                   <Input
                     {...field}
                     type='time'
+                    id='time'
+                    name='time'
                     className='w-full border-2 rounded-sm py-3 px-4 border-[#441D81] !text-xl bg-[#FFF4F1] font-bold'
                   />
                 </FormControl>
@@ -205,13 +210,18 @@ export default function Book({
           name='people'
           render={({ field }) => (
             <FormItem className='w-full relative'>
-              <FormLabel className='absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs text-[#441D81]'>
+              <FormLabel
+                htmlFor='people'
+                className='absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs text-[#441D81]'
+              >
                 Number of awesome bowlers
               </FormLabel>
               <FormControl onChange={() => adjustTheNumberOfLanes()}>
                 <Input
                   {...field}
                   type='number'
+                  name='people'
+                  id='people'
                   className={`w-full border-2 rounded-sm py-3 px-4 ${
                     errors.people ? 'border-[#EC315A]' : 'border-[#441D81]'
                   } !text-xl bg-[#FFF4F1] font-bold`}
@@ -231,16 +241,25 @@ export default function Book({
           name='lanes'
           render={({ field }) => (
             <FormItem className='w-full relative'>
-              <FormLabel className='absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs text-[#441D81]'>
+              <FormLabel
+                htmlFor='lanes'
+                className={`absolute bg-[#FFF4F1] -top-0.2 left-[5%] z-10 px-1 text-xs ${
+                  errors.lanes ? 'text-[#EC315A]' : 'text-[#441D81]'
+                } `}
+              >
                 Number of Lanes
               </FormLabel>
               <FormControl onChange={adjustTheNumberOfLanes}>
                 <Input
                   {...field}
                   type='number'
+                  name='lanes'
+                  id='lanes'
                   min={1}
-                  className={`w-full border-2 rounded-sm py-3 px-4 ${
-                    errors.lanes ? 'border-[#EC315A]' : 'border-[#441D81]'
+                  className={`w-full border-2 rounded-sm py-3 px-4  ${
+                    errors.lanes
+                      ? 'border-[#EC315A] text-[#EC315A]'
+                      : 'border-[#441D81] text-black'
                   } !text-xl bg-[#FFF4F1] font-bold`}
                 />
               </FormControl>
@@ -258,7 +277,7 @@ export default function Book({
           <div className='p-[0.5px] min-w-[40%] bg-[#441D81]' />
         </div>
 
-        <div className='w-full h-[200px] py-1 overflow-y-auto -mt-3 px-1'>
+        <div className='w-full h-[150px] py-1 overflow-y-auto -mt-3 px-1'>
           {shoesArray.map((_, index) => (
             <FormField
               key={index}
@@ -266,13 +285,18 @@ export default function Book({
               name='shoes'
               render={({ field }) => (
                 <FormItem className='w-full relative'>
-                  <FormLabel className='absolute bg-[#FFF4F1] -top-2 left-[5%] z-10 px-1 text-xs text-[#441D81]'>
+                  <FormLabel
+                    htmlFor={`shoes-${index}`}
+                    className='absolute bg-[#FFF4F1] -top-2 left-[5%] z-10 px-1 text-xs text-[#441D81]'
+                  >
                     Shoe size / person {index + 1}
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type='number'
+                      name={`shoes-${index}`}
+                      id={`shoes-${index}`}
                       className={`w-full border-2 rounded-sm py-3 px-4 ${
                         errors.shoes ? 'border-[#EC315A]' : 'border-[#441D81]'
                       } !text-xl bg-[#FFF4F1] font-bold`}
