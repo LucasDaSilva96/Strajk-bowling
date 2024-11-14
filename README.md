@@ -2,7 +2,7 @@
 
 Welcome to Strajk Bowling, a modern and interactive bowling experience designed for the tech-savvy and fun-loving crowd. This project showcases a fully functional web application built with cutting-edge technologies, ensuring a seamless and engaging user experience.
 
-💻[Live demo](https://website-name.com 'www.strajk.io')
+💻[Live demo](https://strajk-bowling.vercel.app/)
 !['Booking page'](/public/Images/Strajk-bowling.png)
 
 ## Features
